@@ -1,0 +1,19 @@
+#Build the images
+docker build -t suggestions-frontend -f Dockerfile .
+docker build -t suggestions-backend -f Dockerfile .
+docker build -t suggestions-db -f Dockerfile .
+
+#Tag the images for pushing to DockerHub
+docker tag suggestions-frontend:latest $DOCKERHUB_USERNAME/suggestions-frontend:latest
+docker tag suggestions-backend:latest $DOCKERHUB_USERNAME/suggestions-backend:latest
+docker tag suggestions-db:latest $DOCKERHUB_USERNAME/suggestions-db:latest
+
+#Push the images to DockerHub
+docker push $DOCKERHUB_USERNAME/suggestions-frontend:latest
+docker push $DOCKERHUB_USERNAME/suggestions-backend:latest
+docker push $DOCKERHUB_USERNAME/suggestions-db:latest
+
+#Run the images locally
+docker run -p 5055:5055 zfranke/suggestions-frontend
+docker run -p 5054:5054 zfranke/suggestions-backend
+docker run -p 3306:3306 --name suggestion-db -e MYSQL_ROOT_PASSWORD=mysecretpassword -d zfranke/suggestions-db

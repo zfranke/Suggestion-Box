@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -50,23 +50,30 @@ app.post('/api/register', (req, res) => {
       return;
     }
 
-    // Hash the password
-    const passwordHash = bcrypt.hashSync(password, 10);
-
-    // Insert user into the database
-    const insertUserSql = 'INSERT INTO users (username, passwordHash) VALUES (?, ?)';
-    pool.query(insertUserSql, [username, passwordHash], (err, result) => {
+    // Hash the password using bcryptjs
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, (err, passwordHash) => {
       if (err) {
-        console.error('Error registering user:', err);
+        console.error('Error hashing password:', err);
         res.status(500).json({ error: 'Error registering user' });
-      } else {
-        // User registered; generate and send JWT
-        const token = jwt.sign({ userId: result.insertId }, process.env.JWT_SECRET, {
-          expiresIn: '1h', // Set token expiration
-        });
-
-        res.status(200).json({ token });
+        return;
       }
+
+      // Insert user into the database
+      const insertUserSql = 'INSERT INTO users (username, passwordHash) VALUES (?, ?)';
+      pool.query(insertUserSql, [username, passwordHash], (err, result) => {
+        if (err) {
+          console.error('Error registering user:', err);
+          res.status(500).json({ error: 'Error registering user' });
+        } else {
+          // User registered; generate and send JWT
+          const token = jwt.sign({ userId: result.insertId }, process.env.JWT_SECRET, {
+            expiresIn: '1h', // Set token expiration
+          });
+
+          res.status(200).json({ token });
+        }
+      });
     });
   });
 });

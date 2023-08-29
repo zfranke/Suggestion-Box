@@ -9,3 +9,6 @@ ENV MYSQL_PASSWORD=suggestionsAreCool12
 
 # Copy initialization SQL script
 COPY init.sql /docker-entrypoint-initdb.d/
+
+# Expose port 3306
+EXPOSE 3306

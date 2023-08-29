@@ -13,3 +13,6 @@ CREATE TABLE users (
   passwordHash CHAR(60) NOT NULL
 );
 
+-- Insert a basic user
+INSERT INTO users (username, passwordHash)
+VALUES ('zfranke@live.com', 'hashed');
