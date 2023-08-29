@@ -4,17 +4,17 @@ services:
     container_name: suggestions-frontend
     image: zfranke/suggestions-frontend
     ports:
-      - '5055:5055'  
+      - '5054:5054'  
     networks:
-      - suggestion-network
+      - suggestions
 
   suggestions-backend:
     container_name: suggestions-backend
     image: zfranke/suggestions-backend
     ports:
-      - '5054:5054'  
+      - '5055:5055'  
     networks:
-      - suggestion-network
+      - suggestions
     depends_on:
       - suggestion-db
 
@@ -26,11 +26,13 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     networks:
-      - suggestion-network
+      - suggestions
 
 networks:
-  suggestion-network:
-    driver: bridge
+  suggestions:
+    external: true
+    ipam:
+      driver: default
 
 volumes:
   db-data:
