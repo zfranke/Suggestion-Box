@@ -17,3 +17,12 @@ docker push $DOCKERHUB_USERNAME/suggestions-db:latest
 docker run -p 5055:5055 zfranke/suggestions-frontend
 docker run -p 5054:5054 zfranke/suggestions-backend
 docker run -p 3306:3306 --name suggestion-db -e MYSQL_ROOT_PASSWORD=mysecretpassword -d zfranke/suggestions-db
+
+#Node arm build for Raspberry Pi
+FROM arm32v7/node:16
+
+#For amd64
+FROM node:16
+
+#For database
+FROM arm32v7/mysql:8.0

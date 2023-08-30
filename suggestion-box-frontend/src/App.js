@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import FormView from './components/FormView';
 import AdminView from './components/AdminView';
-import Container from '@mui/material/Container';
-import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Register from './components/Register';
-import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

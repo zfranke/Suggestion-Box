@@ -160,6 +160,12 @@ app.get('/api/get-suggestions', authenticateToken, (req, res) => {
   });
 });
 
+//Basic GET request to validate the server is online
+app.get('/api/online', (req, res) => {
+  res.status(200).json({ message: 'Server is online' });
+});
+
+
 
 // API Endpoint to Submit Suggestion
 app.post('/api/submit-suggestion', (req, res) => {
