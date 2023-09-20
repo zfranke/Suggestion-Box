@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import FormView from './components/FormView';
 import AdminView from './components/AdminView';
 import Login from './components/Login';
 import Register from './components/Register';
-
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,7 +45,14 @@ function App() {
           path="/admin"
           element={
             isInitialized ? ( // Render only after initialization
-              isAuthenticated ? <AdminView /> : <Navigate to="/login" />
+              isAuthenticated ? (
+                <div>
+                  <AdminView />
+                  <button onClick={handleLogout}>Logout</button> {/* Logout button */}
+                </div>
+              ) : (
+                <Navigate to="/login" />
+              )
             ) : null
           }
         />
