@@ -53,6 +53,8 @@ pipeline {
     post {
         always {
             // Clean up resources, send notifications, or perform other post-build actions
+            sh 'docker stop suggestion-db suggestion-backend suggestion-frontend'
+            sh 'docker rm suggestion-db suggestion-backend suggestion-frontend'
         }
     }
 }
