@@ -2,7 +2,7 @@ version: '3'
 services:
   suggestions-frontend:
     container_name: suggestions-frontend
-    image: zfranke/suggestions-frontend:local
+    image: suggestions-frontend
     ports:
       - '5054:5054'  
     networks:
@@ -10,7 +10,7 @@ services:
 
   suggestions-backend:
     container_name: suggestions-backend
-    image: zfranke/suggestions-backend:local
+    image: suggestions-backend
     ports:
       - '5055:5055'  
     networks:
@@ -20,7 +20,7 @@ services:
 
   suggestion-db:
     container_name: suggestion-db
-    image: zfranke/suggestions-db:local
+    image: suggestions-db
     ports:
       - '3306:3306'
     volumes:

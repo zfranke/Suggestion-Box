@@ -14,7 +14,7 @@ build() {
 
     cd "$folder"
     # Run the docker build
-    docker build -t "$image_name:$image_tag" -f "$dockerfile" .
+    docker build -t "$image_name" -f "$dockerfile" .
     built_sections+=("$folder")
 }
 
@@ -27,5 +27,5 @@ build suggestion-box-database suggestions-database local dockerfile &
 wait
 
 # Print the sections that were built and pushed
-echo "Sections built and pushed: ${built_sections[@]}"
+echo "Sections built: ${built_sections[@]}"
 echo "All sections processed."
