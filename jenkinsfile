@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Build and Test Containers') {
+        stage('Build and Test Containers:') {
             steps {
                 // Database
                 dir(path: 'suggestion-box-db') {
