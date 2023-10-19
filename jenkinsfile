@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Checkout the code from GitHub
-                git branch: 'main', credentialsId: 'github-creds-pat', url: 'https://github.com/zfranke/Suggestion-Box'
+                git branch: 'main', credentialsId: 'github-creds-pat', url: 'https://github.com/zfranke/Suggestion-Box.git'
             }
         }
 
