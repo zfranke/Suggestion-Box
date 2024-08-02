@@ -35,6 +35,8 @@ const pool = mysql.createPool({
 app.post('/api/register', (req, res) => {
   const { username, password } = req.body;
 
+  console.log("Register request received:", username);
+
   // Check if the username is already taken
   const checkUsernameSql = 'SELECT * FROM users WHERE username = ?';
   pool.query(checkUsernameSql, [username], (err, rows) => {
@@ -46,6 +48,7 @@ app.post('/api/register', (req, res) => {
 
     // If username already exists, return an error
     if (rows.length > 0) {
+      console.log('Username already taken:', username);
       res.status(400).json({ error: 'Username already taken' });
       return;
     }
@@ -66,6 +69,8 @@ app.post('/api/register', (req, res) => {
           console.error('Error registering user:', err);
           res.status(500).json({ error: 'Error registering user' });
         } else {
+          console.log('User registered successfully:', username);
+          
           // User registered; generate and send JWT
           const token = jwt.sign({ userId: result.insertId }, process.env.JWT_SECRET, {
             expiresIn: '1h', // Set token expiration
@@ -78,9 +83,12 @@ app.post('/api/register', (req, res) => {
   });
 });
 
+
 // API Endpoint to Authenticate and Get JWT
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+
+  console.log("Login recorded" );
 
   // Retrieve user from the database based on username
   const getUserQuery = 'SELECT * FROM users WHERE username = ?';
@@ -162,7 +170,20 @@ app.get('/api/get-suggestions', authenticateToken, (req, res) => {
 
 //Basic GET request to validate the server is online
 app.get('/api/online', (req, res) => {
-  res.status(200).json({ message: 'Server is online' });
+  res.status(200).json({ message: 'Backend Server is online' });
+});
+
+//Basic Get to check if the database is online
+app.get('/api/db-online', (req, res) => {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error('Error getting database connection:', err);
+      res.status(500).json({ error: 'Error getting database connection' });
+      return;
+    }
+    res.status(200).json({ message: 'Database is online' });
+    connection.release();
+  });
 });
 
 

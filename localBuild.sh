@@ -15,7 +15,6 @@ build() {
     cd "$folder"
     # Run the docker build
     docker build -t "$image_name" -f "$dockerfile" .
-    built_sections+=("$folder")
 }
 
 # Run build function for each section in parallel
@@ -25,6 +24,22 @@ build suggestion-box-database suggestions-database local dockerfile &
 
 # Wait for all background processes to finish
 wait
+
+#If the push flag is set, push the images to the registry
+#Example: ./localBuild.sh push
+if [ "$1" == "push" ]; then
+
+    echo "Tag the images to the registry..."
+    # Tag the images to the registry
+    docker tag "suggestions-frontend" "zfranke/suggestions-frontend:latest"
+    docker tag "suggestions-backend" "zfranke/suggestions-backend:latest"
+    docker tag "suggestions-database" "zfranke/suggestions-database:latest"
+    echo "Pushing images to the registry..."
+    # Push the images to the registry
+    docker push "zfranke/suggestions-frontend:latest"
+    docker push "zfranke/suggestions-backend:latest"
+    docker push "zfranke/suggestions-database:latest"
+fi
 
 # Print the sections that were built and pushed
 echo "Sections built: ${built_sections[@]}"

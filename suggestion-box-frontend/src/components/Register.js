@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
 import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,22 +11,31 @@ function Register({ onRegister }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/register`, {
-        username,
-        password,
-      })
-      .then((response) => {
-        const token = response.data.token;
-        onRegister(token);
-        alert('Registration successful!');
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.error('Registration error:', error);
-      });
+  const handleRegister = (event) => {
+    event.preventDefault();
 
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const token = data.token;
+      onRegister(token);
+      alert('Registration successful!');
+      navigate('/login');
+    })
+    .catch(error => {
+      console.error('Registration error:', error);
+    });
   };
 
   return (

@@ -15,4 +15,4 @@ CREATE TABLE users (
 
 -- Insert a basic user
 INSERT INTO users (username, passwordHash)
-VALUES ('zfranke@live.com', '$2a$10$57OA03ZDaCHy2uwKnSwgp.kO35fRD1dPL2tOgUwJdRvd96AalaOBW');
+VALUES ('zfranke@live.com', '$2y$10$lG6R0e6LhLRTBeMhvcv3buoosheXO5PPL.r0hru0DnudX5aROvPqi');

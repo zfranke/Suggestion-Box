@@ -1,4 +1,4 @@
-# Use the official MySQL image from Docker Hub
+# Use the official MySQL image from DockerHub
 FROM mysql:8.0
 
 # Set environment variables

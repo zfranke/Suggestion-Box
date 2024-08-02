@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Typography, Container } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,22 +16,38 @@ function Login({ onLogin }) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        axios
-            .post(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
+        console.log('Login attempt:', {
+            username: data.get('username'),
+            password: data.get('password'),
+        });
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 username: data.get('username'),
                 password: data.get('password'),
-            })
-            .then((response) => {
-                const token = response.data.token;
-                onLogin(token);
-                console.log(token);
-                setLoginStatus('success');
-                navigate('/admin');
-            })
-            .catch((error) => {
-                console.error('Login error:', error);
-                setLoginStatus('error');
-            });
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const token = data.token;
+            onLogin(token);
+            console.log('Login successful:', token);
+            setLoginStatus('success');
+            navigate('/admin');
+        })
+        .catch(error => {
+            console.error('Login error:', error);
+            setLoginStatus('error');
+        });
     };
 
     return (
