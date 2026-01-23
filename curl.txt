@@ -4,4 +4,4 @@ curl -X POST http://suggestions-backend:5055/api/login \
 
 curl -X POST http://suggestions-backend:5055/api/register \
      -H "Content-Type: application/json" \
-     -d '{"username": "zfranke22", "password": "22565"
+     -d '{"username": "zfranke22", "password": "22565"}'
