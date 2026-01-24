@@ -1,7 +1,7 @@
 USE suggestion_box;
 
 -- Create a table for suggestions
-CREATE TABLE suggestions (
+CREATE TABLE suggestionsTable (
   id INT AUTO_INCREMENT PRIMARY KEY,
   suggestion_text TEXT NOT NULL
 );
@@ -15,4 +15,4 @@ CREATE TABLE users (
 
 -- Insert a basic user
 INSERT INTO users (username, passwordHash)
-VALUES ('zfranke@live.com', '$2y$10$lG6R0e6LhLRTBeMhvcv3buoosheXO5PPL.r0hru0DnudX5aROvPqi');
+VALUES ('test@example.com', '$2y$10$lG6R0e6LhLRTBeMhvcv3buoosheXO5PPL.r0hru0DnudX5aROvPqi');
