@@ -38,13 +38,13 @@ pipeline {
             steps {
                 sh '''
                   for i in {1..10}; do
-                    docker exec ci-suggestions-backend \
-                      curl -sf http://ci-suggestions-backend:5055/health && exit 0
+                    docker exec suggestions-backend \
+                      curl -sf http://suggestions-backend:5055/health && exit 0
                     sleep 3
                   done
 
                   echo "Backend failed to become healthy"
-                  docker logs ci-suggestions-backend || true
+                  docker logs suggestions-backend || true
                   exit 1
                 '''
             }
@@ -53,8 +53,8 @@ pipeline {
         stage('Frontend → Backend Connectivity') {
             steps {
                 sh '''
-                  docker exec ci-suggestions-frontend \
-                    curl -sf http://ci-suggestions-backend:5055/health
+                  docker exec suggestions-frontend \
+                    curl -sf http://suggestions-backend:5055/health
                 '''
             }
         }
@@ -66,9 +66,9 @@ pipeline {
                 if (params.TEARDOWN_CONTAINERS) {
                     sh '''
                     docker rm -f \
-                        ci-suggestions-db \
-                        ci-suggestions-backend \
-                        ci-suggestions-frontend || true
+                        suggestions-db \
+                        suggestions-backend \
+                        suggestions-frontend || true
 
                     docker network rm $NETWORK || true
                     '''
