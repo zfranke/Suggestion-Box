@@ -10,8 +10,6 @@ pipeline {
     }
 
     environment {
-        NETWORK = 'suggestion-box-ci'
-
         DB_ROOT_PASSWORD = credentials('suggestion-db-root-password')
         DB_NAME          = credentials('suggestion-db-name')
     }
@@ -69,8 +67,6 @@ pipeline {
                         suggestions-db \
                         suggestions-backend \
                         suggestions-frontend || true
-
-                    docker network rm $NETWORK || true
                     '''
                 } else {
                     echo "Leaving CI containers running (TEARDOWN_CONTAINERS=false)"
