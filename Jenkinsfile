@@ -39,7 +39,7 @@ pipeline {
                 sh '''
                   for i in {1..10}; do
                     docker exec ci-suggestions-backend \
-                      curl -sf http://localhost:5055/health && exit 0
+                      curl -sf http://ci-suggestions-backend:5055/health && exit 0
                     sleep 3
                   done
 
