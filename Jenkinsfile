@@ -41,17 +41,17 @@ pipeline {
             steps {
                 sh '''
                   docker run -d --rm \
-                    --name suggestion-db \
+                    --name suggestion-db-test \
                     --network $NETWORK \
                     suggestion-box-db
 
                   docker run -d --rm \
-                    --name suggestion-backend \
+                    --name suggestion-backend-test \
                     --network $NETWORK \
                     suggestion-box-backend
 
                   docker run -d --rm \
-                    --name suggestion-frontend \
+                    --name suggestion-frontend-test \
                     --network $NETWORK \
                     -p 8080:80 \
                     suggestion-box-frontend
@@ -64,7 +64,7 @@ pipeline {
                 sh '''
                   echo "Waiting for backend..."
                   for i in {1..10}; do
-                    docker exec suggestion-backend \
+                    docker exec suggestion-backend-test \
                       curl -sf http://suggestion-backend:5055/health && exit 0
                     sleep 3
                   done
@@ -77,7 +77,7 @@ pipeline {
         stage('Frontend → Backend Connectivity') {
             steps {
                 sh '''
-                  docker exec suggestion-frontend \
+                  docker exec suggestion-frontend-test \
                     curl -sf http://suggestion-backend:5055
                 '''
             }
@@ -87,7 +87,7 @@ pipeline {
     post {
         always {
             sh '''
-              docker rm -f suggestion-db suggestion-backend suggestion-frontend || true
+              docker rm -f suggestion-db-test suggestion-backend-test suggestion-frontend-test || true
               docker network rm $NETWORK || true
             '''
         }
