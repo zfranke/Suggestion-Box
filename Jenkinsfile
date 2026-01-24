@@ -48,6 +48,7 @@ pipeline {
                   docker run -d --rm \
                     --name suggestions-backend \
                     --network $NETWORK \
+                    -p 5055:5055 \
                     suggestion-box-backend
 
                   docker run -d --rm \
