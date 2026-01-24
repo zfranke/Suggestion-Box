@@ -53,7 +53,7 @@ pipeline {
                   docker run -d --rm \
                     --name suggestion-frontend-test \
                     --network $NETWORK \
-                    -p 8080:80 \
+                    -p 5054:5054 \
                     suggestion-box-frontend
                 '''
             }
