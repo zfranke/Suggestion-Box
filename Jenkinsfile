@@ -30,7 +30,7 @@ pipeline {
 
         stage('Start CI Stack') {
             steps {
-                sh 'docker compose -f docker-compose.ci.yml up -d'
+                sh 'docker compose docker-compose.ci.yml up -d'
             }
         }
 
@@ -67,7 +67,7 @@ pipeline {
                     sh '''
                     docker rm -f \
                         ci-suggestion-db \
-                        suggestions-backend \
+                        ci-suggestions-backend \
                         suggestions-frontend || true
 
                     docker network rm $NETWORK || true
