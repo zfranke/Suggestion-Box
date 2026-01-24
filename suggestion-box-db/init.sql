@@ -1,7 +1,7 @@
 USE suggestion_box;
 
 -- Create a table for suggestions
-CREATE TABLE suggestionsTable (
+CREATE TABLE suggestions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   suggestion_text TEXT NOT NULL
 );

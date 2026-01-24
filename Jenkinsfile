@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                   docker exec ci-suggestions-frontend \
-                    curl -sf http://ci-suggestions-backend:5055
+                    curl -sf http://ci-suggestions-backend:5055/health
                 '''
             }
         }
@@ -68,7 +68,7 @@ pipeline {
                     docker rm -f \
                         ci-suggestions-db \
                         ci-suggestions-backend \
-                        cisuggestions-frontend || true
+                        ci-suggestions-frontend || true
 
                     docker network rm $NETWORK || true
                     '''
