@@ -1,6 +1,14 @@
 pipeline {
     agent { label 'docker-worker' }
 
+    parameters {
+        booleanParam(
+            name: 'CLEANUP_CONTAINERS',
+            defaultValue: true,
+            description: 'If true, remove suggestion containers after the run'
+        )
+    }
+
     environment {
         NETWORK = 'suggestion-box-ci'
     }
@@ -48,13 +56,11 @@ pipeline {
                   docker run -d --rm \
                     --name suggestions-backend \
                     --network $NETWORK \
-                    -p 5055:5055 \
                     suggestion-box-backend
 
                   docker run -d --rm \
                     --name suggestions-frontend \
                     --network $NETWORK \
-                    -p 5054:5054 \
                     suggestion-box-frontend
                 '''
             }
@@ -70,6 +76,7 @@ pipeline {
                     sleep 3
                   done
                   echo "Backend failed to become healthy"
+                  docker logs suggestions-backend || true
                   exit 1
                 '''
             }
@@ -79,8 +86,28 @@ pipeline {
             steps {
                 sh '''
                   docker exec suggestions-frontend \
-                    curl -sf http://suggestions-backend:5055
+                    curl -sf http://suggestions-backend:5055/health
                 '''
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                if (params.CLEANUP_CONTAINERS) {
+                    echo 'Cleaning up suggestion containers'
+                    sh '''
+                      docker rm -f \
+                        suggestions-db \
+                        suggestions-backend \
+                        suggestions-frontend || true
+
+                      docker network rm $NETWORK || true
+                    '''
+                } else {
+                    echo 'Skipping cleanup — containers left running for inspection'
+                }
             }
         }
     }
