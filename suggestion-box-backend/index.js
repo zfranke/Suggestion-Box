@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5055;
 
 // Configure CORS options using FRONTEND_URL from .env
 // const corsOptions = {
