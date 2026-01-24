@@ -24,7 +24,7 @@ services:
 
   suggestion-db:
     container_name: suggestion-db
-    image: suggestions-db
+    image: suggestion-db
     ports:
       - '3306:3306'
     volumes:

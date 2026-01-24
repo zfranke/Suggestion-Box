@@ -3,7 +3,7 @@ version: "3.9"
 services:
   suggestion-db:
     image: suggestion-box-db
-    container_name: suggestions-db
+    container_name: suggestion-db
     ports:
       - '3306:3306'
     networks: 
