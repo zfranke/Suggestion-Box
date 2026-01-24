@@ -3,7 +3,7 @@ version: "3.9"
 services:
   suggestion-db:
     image: suggestion-box-db
-    container_name: ci-suggestion-db
+    container_name: ci-suggestions-db
     environment:
        MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
        MYSQL_DATABASE: ${DB_NAME}

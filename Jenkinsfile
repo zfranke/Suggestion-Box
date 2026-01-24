@@ -30,7 +30,7 @@ pipeline {
 
         stage('Start CI Stack') {
             steps {
-                sh 'docker compose docker-compose.ci.yml up -d'
+                sh 'docker-compose -f docker-compose.ci.yml up -d'
             }
         }
 
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                   docker exec ci-suggestions-frontend \
-                    curl -sf http://suggestions-backend:5055
+                    curl -sf http://ci-suggestions-backend:5055
                 '''
             }
         }
@@ -66,9 +66,9 @@ pipeline {
                 if (params.TEARDOWN_CONTAINERS) {
                     sh '''
                     docker rm -f \
-                        ci-suggestion-db \
+                        ci-suggestions-db \
                         ci-suggestions-backend \
-                        suggestions-frontend || true
+                        cisuggestions-frontend || true
 
                     docker network rm $NETWORK || true
                     '''
@@ -78,4 +78,5 @@ pipeline {
             }
         }
     }
+
 }
