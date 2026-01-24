@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  suggestion-db:
+    image: suggestion-box-db
+    container_name: ci-suggestion-db
+    environment:
+       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+       MYSQL_DATABASE: ${DB_NAME}
+    expose:
+      - "3306"
+
+  suggestions-backend:
+    image: suggestion-box-backend
+    container_name: ci-suggestions-backend
+    depends_on:
+      - suggestion-db
+    environment:
+      DB_HOST: suggestion-db
+      DB_PORT: 3306
+      PORT: 5055
+    expose:
+      - "3001"
+
+  suggestions-frontend:
+    image: suggestion-box-frontend
+    container_name: ci-suggestions-frontend
+    depends_on:
+      - suggestions-backend
+    environment:
+      REACT_APP_BACKEND_URL: http://suggestions-backend:5055
+      PORT: 5054
+    expose:
+      - "5054"
