@@ -18,9 +18,9 @@ services:
     ports:
       - '5055:5055'
     depends_on:
-      - suggestions-db
+      - suggestion-db
     environment:
-      DB_HOST: suggestions-db
+      DB_HOST: suggestion-db
       DB_PORT: 3306
       PORT: 5055
     expose:
