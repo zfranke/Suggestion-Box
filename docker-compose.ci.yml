@@ -3,7 +3,7 @@ version: "3.9"
 services:
   suggestion-db:
     image: suggestion-box-db
-    container_name: ci-suggestions-db
+    container_name: suggestions-db
     ports:
       - '3306:3306'
     environment:
@@ -14,13 +14,13 @@ services:
 
   suggestions-backend:
     image: suggestion-box-backend
-    container_name: ci-suggestions-backend
+    container_name: suggestions-backend
     ports:
       - '5055:5055'
     depends_on:
-      - suggestion-db
+      - suggestions-db
     environment:
-      DB_HOST: suggestion-db
+      DB_HOST: suggestions-db
       DB_PORT: 3306
       PORT: 5055
     expose:
@@ -28,7 +28,7 @@ services:
 
   suggestions-frontend:
     image: suggestion-box-frontend
-    container_name: ci-suggestions-frontend
+    container_name: suggestions-frontend
     ports:
       - '5054:5054'
     depends_on:
