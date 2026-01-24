@@ -141,6 +141,11 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 
 // API Endpoint to Get Suggestions (Protected with authentication)
 app.get('/api/get-suggestions', authenticateToken, (req, res) => {
