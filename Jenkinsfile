@@ -22,7 +22,7 @@ pipeline {
 
         stage('Start Stack') {
             steps {
-                sh 'docker compose -f docker-compose.ci.yml up -d'
+                sh 'docker-compose -f docker-compose.ci.yml up -d'
             }
         }
 
