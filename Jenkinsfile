@@ -1,19 +1,13 @@
 pipeline {
     agent { label 'docker-worker' }
 
-    parameters {
-        booleanParam(
-            name: 'TEARDOWN_CONTAINERS',
-            defaultValue: true,
-            description: 'Remove CI containers after pipeline finishes'
-        )
-    }
-
     environment {
         DB_ROOT_PASSWORD = credentials('suggestion-db-root-password')
         DB_NAME          = credentials('suggestion-db-name')
-    }
 
+        FRONTEND_URL = 'http://suggestions.zfserver.lan'
+        BACKEND_URL  = 'http://suggestions-backend.zfserver.lan:5055'
+    }
 
     stages {
         stage('Build Images') {
@@ -26,9 +20,11 @@ pipeline {
             }
         }
 
-        stage('Start CI Stack') {
+        stage('Start Stack') {
             steps {
-                sh 'docker-compose -f docker-compose.ci.yml up -d'
+                sh '''
+                  docker-compose up -d
+                '''
             }
         }
 
@@ -36,8 +32,7 @@ pipeline {
             steps {
                 sh '''
                   for i in {1..10}; do
-                    docker exec suggestions-backend \
-                      curl -sf http://suggestions-backend:5055/health && exit 0
+                    curl -sf ${BACKEND_URL}/health && exit 0
                     sleep 3
                   done
 
@@ -48,11 +43,11 @@ pipeline {
             }
         }
 
-        stage('Frontend → Backend Connectivity') {
+        stage('Run Tests') {
             steps {
                 sh '''
-                  docker exec suggestions-frontend \
-                    curl -sf http://suggestions-backend:5055/health
+                  echo "Running frontend → backend test"
+                  curl -sf ${BACKEND_URL}/api/health
                 '''
             }
         }
@@ -61,18 +56,31 @@ pipeline {
     post {
         always {
             script {
-                if (params.TEARDOWN_CONTAINERS) {
+                def response = input(
+                    id: 'cleanupPrompt',
+                    message: 'Delete Suggestion Box containers?',
+                    ok: 'Proceed',
+                    parameters: [
+                        booleanParam(
+                            defaultValue: true,
+                            description: 'Delete containers after this run?',
+                            name: 'DELETE_CONTAINERS'
+                        )
+                    ]
+                )
+
+                if (response) {
+                    echo 'User chose to delete containers'
                     sh '''
-                    docker rm -f \
-                        suggestions-db \
-                        suggestions-backend \
-                        suggestions-frontend || true
+                      docker-compose down -v
                     '''
                 } else {
-                    echo "Leaving CI containers running (TEARDOWN_CONTAINERS=false)"
+                    echo 'Containers left running for inspection'
+                    sh '''
+                      docker ps --filter "name=suggestions"
+                    '''
                 }
             }
         }
     }
-
 }
