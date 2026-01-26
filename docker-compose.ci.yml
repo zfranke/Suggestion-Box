@@ -4,31 +4,30 @@ services:
   suggestion-db:
     image: suggestion-box-db
     container_name: suggestion-db
-    ports:
-      - '3306:3306'
-    networks: 
-      - zf-network
     environment:
-       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-       MYSQL_DATABASE: ${DB_NAME}
-    expose:
-      - "3306"
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
 
   suggestions-backend:
     image: suggestion-box-backend
     container_name: suggestions-backend
-    ports:
-      - '5055:5055'
     depends_on:
       - suggestion-db
-    networks:
-      - zf-network
     environment:
       DB_HOST: suggestion-db
       DB_PORT: 3306
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
       PORT: 5055
-    expose:
-      - "3001"
+    ports:
+      - "5055:5055"
+
 
   suggestions-frontend:
     image: suggestion-box-frontend

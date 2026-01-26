@@ -5,6 +5,10 @@ pipeline {
         DB_ROOT_PASSWORD = credentials('suggestion-db-root-password')
         DB_NAME          = credentials('suggestion-db-name')
 
+        DB_USER          = credentials('suggestion-db-user')
+        DB_PASSWORD      = credentials('suggestion-db-password')
+        JWT_SECRET       = credentials('suggestion-jwt-secret')
+
         FRONTEND_URL = 'http://suggestions.zfserver.lan'
         BACKEND_URL  = 'http://suggestions-backend.zfserver.lan:5055'
     }
