@@ -20,6 +20,13 @@ pipeline {
             }
         }
 
+        // Validate compose version
+        stage('Validate which Docker Compose is installed') {
+            steps {
+                sh 'docker compose version'
+            }
+        }   
+
         stage('Start Stack') {
             steps {
                 sh 'docker compose -f docker-compose.ci.yml up -d'
