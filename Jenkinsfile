@@ -29,7 +29,7 @@ pipeline {
 
         stage('Start Stack') {
             steps {
-                sh 'docker compose -f docker-compose.ci.yml up -d'
+                sh 'docker-compose -f docker-compose.ci.yml up -d'
             }
         }
 
@@ -78,7 +78,7 @@ pipeline {
                 if (response) {
                     echo 'User chose to delete containers'
                     sh '''
-                      docker compose down -v
+                      docker-compose down -v
                     '''
                 } else {
                     echo 'Containers left running for inspection'
