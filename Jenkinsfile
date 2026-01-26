@@ -22,15 +22,16 @@ pipeline {
 
         stage('Start Stack') {
             steps {
-                sh 'docker-compose -f docker-compose.ci.yml up -d'
+                sh 'docker compose -f docker-compose.ci.yml up -d'
             }
         }
 
         stage('Backend Health Check') {
             steps {
                 sh '''
-                  for i in {1..10}; do
-                    curl -sf ${BACKEND_URL}/health && exit 0
+                 for i in {1..10}; do
+                    docker exec suggestions-backend \
+                      curl -sf ${BACKEND_URL}/health && exit 0
                     sleep 3
                   done
 
@@ -41,11 +42,11 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Frontend → Backend Connectivity') {
             steps {
                 sh '''
-                  echo "Running frontend → backend test"
-                  curl -sf ${BACKEND_URL}/api/health
+                  docker exec suggestions-frontend \
+                    curl -sf ${BACKEND_URL}/health
                 '''
             }
         }
@@ -70,7 +71,7 @@ pipeline {
                 if (response) {
                     echo 'User chose to delete containers'
                     sh '''
-                      docker-compose down -v
+                      docker compose down -v
                     '''
                 } else {
                     echo 'Containers left running for inspection'
