@@ -23,7 +23,7 @@ pipeline {
         // Validate compose version
         stage('Validate which Docker Compose is installed') {
             steps {
-                sh 'docker compose version'
+                sh 'docker-compose version'
             }
         }   
 
