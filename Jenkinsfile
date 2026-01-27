@@ -20,9 +20,9 @@ pipeline {
                 sh '''
                 echo "Checking for existing containers..."
 
-                if docker compose -f docker-compose.ci.yml ps -q | grep -q .; then
+                if docker-compose -f docker-compose.ci.yml ps -q | grep -q .; then
                     echo "Existing containers found — bringing stack down"
-                    docker compose -f docker-compose.ci.yml down -v
+                    docker-compose -f docker-compose.ci.yml down -v
                 else
                     echo "No existing containers found"
                 fi
