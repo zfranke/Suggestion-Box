@@ -20,7 +20,7 @@ build() {
 # Run build function for each section in parallel
 build suggestion-box-frontend suggestions-frontend local dockerfile &
 build suggestion-box-backend suggestions-backend local dockerfile &
-build suggestion-box-database suggestions-database local dockerfile &
+build suggestion-box-db suggestions-database local dockerfile &
 
 # Wait for all background processes to finish
 wait
