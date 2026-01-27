@@ -20,11 +20,11 @@ pipeline {
                 sh '''
                 echo "Checking for existing containers..."
 
-                if docker-compose -f docker-compose.ci.yml ps -q | grep -q .; then
-                    echo "Existing containers found — bringing stack down"
-                    docker-compose -f docker-compose.ci.yml down -v
+                if [ "$(docker ps -q -f name=suggestions-backend)" ]; then
+                  echo "Stopping existing Suggestion Box stack..."
+                  docker-compose -f docker-compose.ci.yml down -v
                 else
-                    echo "No existing containers found"
+                  echo "No existing Suggestion Box containers found."
                 fi
                 '''
             }
