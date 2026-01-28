@@ -79,34 +79,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                def response = input(
-                    id: 'cleanupPrompt',
-                    message: 'Delete Suggestion Box containers?',
-                    ok: 'Proceed',
-                    parameters: [
-                        booleanParam(
-                            defaultValue: true,
-                            description: 'Delete containers after this run?',
-                            name: 'DELETE_CONTAINERS'
-                        )
-                    ]
-                )
-
-                if (response) {
-                    echo 'User chose to delete containers'
-                    sh '''
-                      docker-compose down -v
-                    '''
-                } else {
-                    echo 'Containers left running for inspection'
-                    sh '''
-                      docker ps --filter "name=suggestions"
-                    '''
-                }
-            }
-        }
-    }
 }
